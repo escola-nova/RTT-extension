@@ -1,0 +1,40 @@
+{
+  "name": "rtt-extension",
+  "version": "0.0.0",
+  "description": "[Chrome extension] Real time tracker for Escola Nova.",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src/ -d lib/",
+    "flow": "flow",
+    "format": "prettier --write \"**/*.+(js|css|sass|yml|yaml|scss|json)\"",
+    "lint": "eslint src",
+    "precommit": "npm run lint",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/escola-nova/RTT-extension.git"
+  },
+  "author": "Escola Nova",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/escola-nova/RTT-extension/issues"
+  },
+  "homepage": "https://github.com/escola-nova/RTT-extension#readme",
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-flow": "6.23.0",
+    "babel-preset-stage-0": "6.24.1",
+    "eslint": "5.9.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-config-prettier": "3.3.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-prettier": "3.0.0",
+    "flow-bin": "0.87.0",
+    "husky": "1.2.0",
+    "prettier": "1.15.2"
+  }
+}
