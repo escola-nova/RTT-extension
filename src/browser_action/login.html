@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+		<link href="https://cdn.auth0.com/styleguide/4.8.12/index.min.css" rel="stylesheet" />
+		<link href="./style.login.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="mainPopup">
+
+			<div class="profile hidden">
+				<div class="picture"></div>
+				<div class="floater-profile">
+					<div class="floater-background"></div>
+					<div class="user-info">
+						<h5 class="nickname"></h5>
+						<h5 class="name"></h5>
+					</div>
+					<hr />
+					<button class="btn btn-danger logout-button">Log Out</button>
+				</div>
+      </div>
+      
+			<div class="loading hidden">
+				<div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+			  <div class="loading-bar"></div>
+      </div>
+      
+			<div class="default">
+				<div class="text-center">
+					<img class="login_logo" src="../assets/icons/icon128.png" alt="logo">
+					<div class="login_title">Welcome to RealTimeTracker</div>
+					<div class="login_caption">please signin</div>
+					<button class="login_btn login_btn-success login-button">login with Google</button>
+				</div>
+      </div>
+      
+		</div>
+		<script src="../../env.js"></script>
+		<script src="./login.js"></script>
+		<script src="../../node_modules/jwt-decode/build/jwt-decode.js"></script>
+	</body>
+</html>
