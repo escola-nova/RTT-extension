@@ -4,12 +4,13 @@
   "description": "[Chrome extension] Real time tracker for Escola Nova.",
   "main": "index.js",
   "scripts": {
-    "build": "babel src/ -d lib/",
+    "build": "npm run format && npm run lint && babel src/ --copy-files --out-dir lib/",
     "flow": "flow",
     "format": "prettier --write \"**/*.+(js|css|sass|yml|yaml|scss|json)\"",
     "lint": "eslint src",
     "precommit": "npm run lint",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "watch": "babel src/ --copy-files --watch --out-dir lib"
   },
   "repository": {
     "type": "git",
