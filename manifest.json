@@ -1,0 +1,23 @@
+{
+  "name": "RTT - Real Time Tracker",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "description": "",
+  "homepage_url": "https://auth0.com/",
+  "browser_action": {
+    "default_title": "Auth0",
+    "default_popup": "src/browser_action/login.html",
+    "default_icon": {
+      "128": "src/assets/icons/icon128.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "./env.js",
+      "node_modules/auth0-chrome/dist/auth0chrome.min.js",
+      "src/main.js"
+    ],
+    "persistent": false
+  },
+  "permissions": ["identity", "notifications", "https://*.auth0.com/*"]
+}

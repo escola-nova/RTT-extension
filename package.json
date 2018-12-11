@@ -36,5 +36,9 @@
     "flow-bin": "0.87.0",
     "husky": "1.2.0",
     "prettier": "1.15.2"
+  },
+  "dependencies": {
+    "auth0-chrome": "^0.1.2",
+    "jwt-decode": "^2.2.0"
   }
 }

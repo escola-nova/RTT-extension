@@ -10,6 +10,7 @@
     "node": true
   },
   "rules": {
-    "prefer-const": "error"
+    "prefer-const": "error",
+    "no-use-before-define": 0
   }
 }
