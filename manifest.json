@@ -19,5 +19,5 @@
     ],
     "persistent": false
   },
-  "permissions": ["identity", "notifications", "https://*.auth0.com/*", "storage"]
+  "permissions": ["identity", "notifications", "https://*.auth0.com/*", "storage", "tabs"]
 }
