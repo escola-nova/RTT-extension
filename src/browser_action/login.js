@@ -9,10 +9,22 @@ function logout() {
   main();
 }
 
+function enableTracker() {
+  window.chrome.runtime.sendMessage({
+    type: 'enableTracker',
+  });
+}
+
+function disableTracker() {
+  window.chrome.runtime.sendMessage({
+    type: 'disableTracker',
+  });
+}
+
 // Minimal jQuery
 const $ = document.querySelector.bind(document);
 
-function renderProfileView(authResult) {
+function renderMainView(authResult) {
   $('.default').classList.add('hidden');
   $('.loading').classList.remove('hidden');
   fetch(`https://${window.env.AUTH0_DOMAIN}/userinfo`, {
@@ -22,17 +34,14 @@ function renderProfileView(authResult) {
   })
     .then(resp => resp.json())
     .then(profile => {
-      ['picture', 'name', 'nickname'].forEach(key => {
+      ['name', 'nickname'].forEach(key => {
         const element = $(`.${key}`);
-        if (element.nodeName === 'DIV') {
-          element.style.backgroundImage = `url(${profile[key]})`;
-          return;
-        }
-
         element.textContent = profile[key];
       });
       $('.loading').classList.add('hidden');
       $('.profile').classList.remove('hidden');
+      $('.enable-button').addEventListener('click', enableTracker);
+      $('.disable-button').addEventListener('click', disableTracker);
       $('.logout-button').addEventListener('click', logout);
     })
     .catch(logout);
@@ -56,7 +65,7 @@ function main() {
   const authResult = JSON.parse(localStorage.authResult || '{}');
   const token = authResult.id_token;
   if (token && isLoggedIn(token)) {
-    renderProfileView(authResult);
+    renderMainView(authResult);
   } else {
     renderDefaultView();
   }
