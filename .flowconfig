@@ -1,6 +1,7 @@
 [ignore]
 <PROJECT_ROOT>/build/.*
 <PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/lib/.*
 <PROJECT_ROOT>/node_modules/.*
 <PROJECT_ROOT>/__tests__/.*
 

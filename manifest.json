@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "manifest_version": 2,
   "description": "",
-  "homepage_url": "https://auth0.com/",
   "browser_action": {
     "default_title": "Auth0",
     "default_popup": "src/browser_action/login.html",
