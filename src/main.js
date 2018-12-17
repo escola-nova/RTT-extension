@@ -1,10 +1,12 @@
+/* eslint-disable no-console */
+
 window.chrome.runtime.onMessage.addListener(event => {
-  events[event.type](event);
+  events[event.type]();
 });
 
 const events = {};
 
-events.authenticate = function authenticate(event) {
+events.authenticate = function authenticate() {
   const options = {
     scope: 'openid profile offline_access',
     device: 'chrome-extension',
@@ -30,7 +32,7 @@ events.authenticate = function authenticate(event) {
     });
 };
 
-events.enableTracker = function enableTracker(event) {
+events.enableTracker = function enableTracker() {
   console.log('========TRACKING ON===========');
   /**
    * Update page.
@@ -45,11 +47,14 @@ events.enableTracker = function enableTracker(event) {
    ** @param {object}    changeInfo  Shows the status: string of the chancge.
    ** @param {Tab}       tab         Contains all Tab infos, including url: string.
    */
-  window.chrome.tabs.onUpdated.addListener(
-    (_, changeInfo, tab) =>
-      changeInfo.status === 'complete' &&
-      console.log('ON UPDATE', new URL(tab.url).hostname),
-  );
+  window.chrome.tabs.onUpdated.addListener((_, changeInfo, tab) => {
+    if (changeInfo.status === 'complete') {
+      sendData({
+        url: tab.url,
+        startTime: Date.now(),
+      });
+    }
+  });
 
   /**
    * Activated tab.
@@ -73,7 +78,12 @@ events.enableTracker = function enableTracker(event) {
      * @callback
      ** @param {Tab} tab All tabs info, including url: string.
      */
-    window.chrome.tabs.get(tabId, tab => console.log('ACTIVATED', tab.url)),
+    window.chrome.tabs.get(tabId, tab => {
+      sendData({
+        url: tab.url,
+        startTime: Date.now(),
+      });
+    }),
   );
 
   /**
@@ -95,16 +105,49 @@ events.enableTracker = function enableTracker(event) {
      */
     window.chrome.tabs.query(
       {active: true, lastFocusedWindow: true},
-      tabs => tabs[0] && console.log('WINDOW FOCUS', tabs[0].url), // if url is the same twice means it's out of focus.
+      tabs =>
+        tabs[0] &&
+        sendData({
+          url: tabs[0].url,
+          startTime: Date.now(),
+        }), // if url is the same twice means it's out of focus.
     );
 
     window.chrome.tabs.query(
-      {active: false},
-      tabs => tabs[0] && console.log('WINDOW LOST FOCUS', tabs[0].url), // if url is the same twice means it's out of focus.
-    );
+      {active: false, lastFocusedWindow: true},
+      tabs =>
+        tabs[0] &&
+        sendData({
+          url: tabs[0].url,
+          startTime: Date.now(),
+        }),
+    ); // if url is the same twice means it's out of focus.
   });
 };
 
-events.disableTracker = function disableTracker(event) {
+events.disableTracker = function disableTracker() {
   console.log('========TRACKING OFF===========');
+  window.chrome.tabs.onUpdated.removeListener();
+  window.chrome.tabs.onActivated.removeListener();
+  window.chrome.windows.onFocusChanged.removeListener();
 };
+
+function sendData(record) {
+  const authResult = JSON.parse(localStorage.authResult || '{}');
+  const body = {
+    id_token: authResult.id_token || undefined,
+  };
+
+  body.record = record;
+
+  fetch(window.env.MICRO_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+    .then(res => res.json())
+    .then(data => console.log('DATA SENT: ', data))
+    .catch(err => console.log('ERROR: ', err));
+}

@@ -9,13 +9,17 @@ function logout() {
   main();
 }
 
-function enableTracker() {
+function enableTracker(e) {
+  if (e.currentTarget.dataset.triggered) return;
+  e.currentTarget.dataset.triggered = true;
   window.chrome.runtime.sendMessage({
     type: 'enableTracker',
   });
 }
 
 function disableTracker() {
+  const enableButton = $('.enable-button');
+  if (enableButton.dataset.triggered) enableButton.dataset.triggered = false;
   window.chrome.runtime.sendMessage({
     type: 'disableTracker',
   });
