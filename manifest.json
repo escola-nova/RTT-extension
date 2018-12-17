@@ -18,5 +18,12 @@
     ],
     "persistent": false
   },
-  "permissions": ["identity", "notifications", "https://*.auth0.com/*", "storage", "tabs"]
+  "permissions": [
+    "identity",
+    "notifications",
+    "storage",
+    "tabs",
+    "https://*.auth0.com/*",
+    "http://*.localhost:3000/*"
+  ]
 }

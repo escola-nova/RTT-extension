@@ -8,7 +8,7 @@
     "flow": "flow",
     "format": "prettier --write \"**/*.+(js|css|sass|yml|yaml|scss|json)\"",
     "lint": "eslint src",
-    "precommit": "npm run lint",
+    "precommit": "npm run format && npm run lint",
     "prepublish": "npm run build",
     "watch": "babel src/ --copy-files --watch --out-dir lib"
   },
