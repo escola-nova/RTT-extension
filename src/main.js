@@ -134,18 +134,14 @@ events.disableTracker = function disableTracker() {
 
 function sendData(record) {
   const authResult = JSON.parse(localStorage.authResult || '{}');
-  const body = {
-    id_token: authResult.id_token || undefined,
-  };
-
-  body.record = record;
 
   fetch(window.env.MICRO_URL, {
     method: 'POST',
     headers: {
+      id_token: authResult.id_token || undefined,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(record),
   })
     .then(res => res.json())
     .then(data => console.log('DATA SENT: ', data))
