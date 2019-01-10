@@ -5,6 +5,7 @@ window.chrome.runtime.onMessage.addListener(event => {
 });
 
 const events = {};
+let currentTab = '';
 
 events.authenticate = function authenticate() {
   const options = {
@@ -47,6 +48,7 @@ events.authenticate = function authenticate() {
  */
 function _onUpdated(_, changeInfo, tab) {
   if (changeInfo.status === 'complete') {
+    currentTab = tab.url;
     sendData({
       url: tab.url,
       startTime: Date.now(),
@@ -77,6 +79,7 @@ function _onActivated({tabId}) {
    ** @param {Tab} tab All tabs info, including url: string.
    */
   window.chrome.tabs.get(tabId, tab => {
+    currentTab = tab.url;
     sendData({
       url: tab.url,
       startTime: Date.now(),
@@ -90,36 +93,23 @@ function _onActivated({tabId}) {
  *
  * @listens event:windows.onFocusChanged
  *
- * @param {func} callback Get the current url by the tabId.
+ * @param {func} callback Get the selected tab.
  */
 function _onFocusChanged() {
   /**
    * Current tab.
-   * @param {Object} queryInfo Take a deeper look.
-   * @param {func}   callback  If url is the same twice means it's out of focus. Update the current url with the tab.url if tabs[0] true.
+   * @param {func} callback Get the current tab and compare.
    *
    * @callback
-   ** @param {Array} tabs Array of tabs with always one Tab.
+   ** @param {Tab} tab All tabs info, including url: string.
    */
-  window.chrome.tabs.query(
-    {active: true, lastFocusedWindow: true},
-    tabs =>
-      tabs[0] &&
-      sendData({
-        url: tabs[0].url,
-        startTime: Date.now(),
-      }), // if url is the same twice means it's out of focus.
-  );
-
-  window.chrome.tabs.query(
-    {active: false, lastFocusedWindow: true},
-    tabs =>
-      tabs[0] &&
-      sendData({
-        url: tabs[0].url,
-        startTime: Date.now(),
-      }),
-  ); // if url is the same twice means it's out of focus.
+  window.chrome.tabs.getSelected(tab => {
+    currentTab = tab && currentTab !== tab.url ? tab.url : null;
+    sendData({
+      url: currentTab,
+      startTime: Date.now(),
+    });
+  });
 }
 
 events.disableTracker = function disableTracker() {
