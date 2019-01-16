@@ -13,25 +13,14 @@ body {
   outline: none;
 }
 #mainPopup {
-  padding: 15px;
+  padding: 20px 15px;
   width: 380px;
   min-height: 100px;
   font-family: Avenir, Helvetica, Ubuntu, Arial, sans-serif;
+  transition: all 0.3s ease;
 }
 .hidden {
   display: none;
-}
-.profile {
-  min-height: 420px;
-}
-.picture {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-position: center;
-  background-size: cover;
 }
 .loading {
   transform: translate(-50%, -50%);
@@ -41,25 +30,25 @@ body {
 }
 .loading-bar {
   display: inline-block;
-  width: 2px;
+  width: 5px;
   height: 16px;
   border-radius: 0px;
   animation: loading 1s ease-in-out infinite;
 }
 .loading-bar:nth-child(1) {
-  background-color: #eb5424;
+  background-color: #e74444;
   animation-delay: 0;
 }
 .loading-bar:nth-child(2) {
-  background-color: #44c7f4;
+  background-color: #e74444;
   animation-delay: 0.09s;
 }
 .loading-bar:nth-child(3) {
-  background-color: #16214d;
+  background-color: #e74444;
   animation-delay: 0.18s;
 }
 .loading-bar:nth-child(4) {
-  background-color: #eaca2c;
+  background-color: #e74444;
   animation-delay: 0.27s;
 }
 @keyframes loading {
@@ -73,37 +62,61 @@ body {
     transform: scale(1);
   }
 }
-.floater-profile {
-  position: absolute;
-  text-align: center;
-  width: 100%;
-  bottom: 0px;
-  left: 0px;
-}
-.user-info {
-  position: relative;
-  z-index: 1;
-}
-.floater-background {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  background: #343434;
-  opacity: 0.7;
-}
-.logout-button {
-  margin-bottom: 15px !important;
-}
-.floater-profile * {
-  color: #fff;
-}
-.nickname::before {
-  content: '@';
+
+.flex-inline {
+  display: flex;
+  align-items: center;
 }
 
-.login_logo {
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile_headline {
+  margin-bottom: 10px;
+}
+
+.profile_title {
+  font-size: 1.3rem;
+  margin: 0;
+  margin-left: 10px;
+}
+
+.profile_name {
+  color: #e74444;
+  margin: 0;
+  margin-left: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  border-radius: 5px;
+  margin: 4px;
+  margin-bottom: -5px;
+  padding: 5px 20px;
+}
+
+.btn:hover {
+  background: #eee;
+}
+
+.btn.active {
+  color: white;
+  background: #e74444;
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.4);
+}
+
+.btn.active:hover {
+  color: white;
+}
+
+.login_logo,
+.profile_logo {
   height: 30px;
 }
 
