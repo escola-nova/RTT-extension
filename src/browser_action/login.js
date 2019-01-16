@@ -9,17 +9,26 @@ function logout() {
   main();
 }
 
-function enableTracker(e) {
-  if (e.currentTarget.dataset.triggered) return;
-  e.currentTarget.dataset.triggered = true;
+function enableTracker() {
+  const enableButton = $('#enable-button');
+  if (enableButton.dataset.triggered === 'true') return;
+  enableButton.dataset.triggered = true;
+  enableButton.classList.add('active');
+  $('#disable-button').classList.remove('active');
+  window.chrome.browserAction.setIcon({path: '../assets/icons/icon128_on.png'});
   window.chrome.runtime.sendMessage({
     type: 'enableTracker',
   });
 }
 
 function disableTracker() {
-  const enableButton = $('.enable-button');
-  if (enableButton.dataset.triggered) enableButton.dataset.triggered = false;
+  const enableButton = $('#enable-button');
+  enableButton.classList.remove('active');
+  $('#disable-button').classList.add('active');
+  enableButton.dataset.triggered = false;
+  window.chrome.browserAction.setIcon({
+    path: '../assets/icons/icon128_off.png',
+  });
   window.chrome.runtime.sendMessage({
     type: 'disableTracker',
   });
@@ -38,15 +47,15 @@ function renderMainView(authResult) {
   })
     .then(resp => resp.json())
     .then(profile => {
-      ['name', 'nickname'].forEach(key => {
+      ['name'].forEach(key => {
         const element = $(`.${key}`);
         element.textContent = profile[key];
       });
       $('.loading').classList.add('hidden');
       $('.profile').classList.remove('hidden');
-      $('.enable-button').addEventListener('click', enableTracker);
-      $('.disable-button').addEventListener('click', disableTracker);
-      $('.logout-button').addEventListener('click', logout);
+      $('#enable-button').addEventListener('click', enableTracker);
+      $('#disable-button').addEventListener('click', disableTracker);
+      enableTracker();
     })
     .catch(logout);
 }
