@@ -10,6 +10,7 @@
       "128": "src/assets/icons/icon128.png"
     }
   },
+  "options_page" : "src/options/privacy-policy.html",
   "background": {
     "scripts": [
       "./env.js",
