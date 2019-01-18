@@ -9,28 +9,29 @@ let currentTab = '';
 
 events.authenticate = function authenticate() {
   const options = {
-    scope: 'openid profile offline_access',
+    scope: 'openid profile email offline_access',
     device: 'chrome-extension',
   };
   new window.Auth0Chrome(window.env.AUTH0_DOMAIN, window.env.AUTH0_CLIENT_ID)
     .authenticate(options)
     .then(authResult => {
       window.localStorage.authResult = JSON.stringify(authResult);
-      window.chrome.notifications.create({
-        type: 'basic',
-        iconUrl: 'src/assets/icons/icon128.png',
-        title: 'Login Successful',
-        message: 'You can use the app now',
-      });
+      window.localStorage.enable = 'true';
+      events.sendNotification('Login Successful', 'You can use the app now');
+      events.enableTracker();
     })
     .catch(err => {
-      window.chrome.notifications.create({
-        type: 'basic',
-        iconUrl: 'src/assets/icons/icon128.png',
-        title: 'Login Failed',
-        message: err.message,
-      });
+      events.sendNotification('Login Failed', err.message);
     });
+};
+
+events.sendNotification = (title, message) => {
+  window.chrome.notifications.create({
+    type: 'basic',
+    iconUrl: 'src/assets/icons/icon128.png',
+    title,
+    message,
+  });
 };
 
 /**
@@ -52,6 +53,7 @@ function _onUpdated(_, changeInfo, tab) {
     sendData({
       url: tab.url,
       startTime: Date.now(),
+      eventType: 'UPDATE_TAB',
     });
   }
 }
@@ -83,6 +85,7 @@ function _onActivated({tabId}) {
     sendData({
       url: tab.url,
       startTime: Date.now(),
+      eventType: 'TAB_ACTIVE_CHANGE',
     });
   });
 }
@@ -108,19 +111,24 @@ function _onFocusChanged() {
     sendData({
       url: currentTab,
       startTime: Date.now(),
+      eventType: 'WINDOW_FOCUS_CHANGED',
     });
   });
 }
 
 events.disableTracker = function disableTracker() {
-  console.log('========TRACKING OFF===========');
+  window.chrome.browserAction.setIcon({
+    path: 'src/assets/icons/icon128_off.png',
+  });
   window.chrome.tabs.onUpdated.removeListener(_onUpdated);
   window.chrome.tabs.onActivated.removeListener(_onActivated);
   window.chrome.windows.onFocusChanged.removeListener(_onFocusChanged);
 };
 
 events.enableTracker = function enableTracker() {
-  console.log('========TRACKING ON===========');
+  window.chrome.browserAction.setIcon({
+    path: 'src/assets/icons/icon128_on.png',
+  });
   window.chrome.tabs.onUpdated.addListener(_onUpdated);
   window.chrome.tabs.onActivated.addListener(_onActivated);
   window.chrome.windows.onFocusChanged.addListener(_onFocusChanged);
@@ -128,7 +136,7 @@ events.enableTracker = function enableTracker() {
 
 function sendData(record) {
   const authResult = JSON.parse(localStorage.authResult || '{}');
-
+  console.log(record.url);
   fetch(window.env.MICRO_URL, {
     method: 'POST',
     headers: {

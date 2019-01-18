@@ -1,63 +1,47 @@
+// Minimal jQuery
+const $ = document.querySelector.bind(document);
+
 function isLoggedIn(token) {
   // The user is logged in if their token isn't expired
-  return window.jwt_decode(token).exp > Date.now() / 1000;
+  return token.exp > Date.now() / 1000;
 }
 
 function logout() {
   // Remove the idToken from storage
   localStorage.clear();
-  main();
 }
 
 function enableTracker() {
-  const enableButton = $('#enable-button');
-  if (enableButton.dataset.triggered === 'true') return;
-  enableButton.dataset.triggered = true;
-  enableButton.classList.add('active');
+  $('#enable-button').classList.add('active');
   $('#disable-button').classList.remove('active');
-  window.chrome.browserAction.setIcon({path: '../assets/icons/icon128_on.png'});
+  if (window.localStorage.enable) return;
+  window.localStorage.enable = 'true';
   window.chrome.runtime.sendMessage({
     type: 'enableTracker',
   });
 }
 
 function disableTracker() {
-  const enableButton = $('#enable-button');
-  enableButton.classList.remove('active');
+  $('#enable-button').classList.remove('active');
   $('#disable-button').classList.add('active');
-  enableButton.dataset.triggered = false;
-  window.chrome.browserAction.setIcon({
-    path: '../assets/icons/icon128_off.png',
-  });
+  window.localStorage.enable = '';
   window.chrome.runtime.sendMessage({
     type: 'disableTracker',
   });
 }
 
-// Minimal jQuery
-const $ = document.querySelector.bind(document);
-
-function renderMainView(authResult) {
+function renderMainView(profile) {
   $('.default').classList.add('hidden');
-  $('.loading').classList.remove('hidden');
-  fetch(`https://${window.env.AUTH0_DOMAIN}/userinfo`, {
-    headers: {
-      Authorization: `Bearer ${authResult.access_token}`,
-    },
-  })
-    .then(resp => resp.json())
-    .then(profile => {
-      ['name'].forEach(key => {
-        const element = $(`.${key}`);
-        element.textContent = profile[key];
-      });
-      $('.loading').classList.add('hidden');
-      $('.profile').classList.remove('hidden');
-      $('#enable-button').addEventListener('click', enableTracker);
-      $('#disable-button').addEventListener('click', disableTracker);
-      enableTracker();
-    })
-    .catch(logout);
+  ['name', 'email'].forEach(key => {
+    const element = $(`.${key}`);
+    element.textContent = profile[key];
+  });
+  $('.loading').classList.add('hidden');
+  $('.profile').classList.remove('hidden');
+  $('#enable-button').addEventListener('click', enableTracker);
+  $('#disable-button').addEventListener('click', disableTracker);
+  if (window.localStorage.enable) enableTracker();
+  else disableTracker();
 }
 
 function renderDefaultView() {
@@ -76,10 +60,11 @@ function renderDefaultView() {
 
 function main() {
   const authResult = JSON.parse(localStorage.authResult || '{}');
-  const token = authResult.id_token;
+  const token = authResult.id_token && window.jwt_decode(authResult.id_token);
   if (token && isLoggedIn(token)) {
-    renderMainView(authResult);
+    renderMainView(token);
   } else {
+    logout();
     renderDefaultView();
   }
 }
