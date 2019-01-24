@@ -136,16 +136,15 @@ events.enableTracker = function enableTracker() {
 
 function sendData(record) {
   const authResult = JSON.parse(localStorage.authResult || '{}');
-  console.log(record.url);
   fetch(window.env.MICRO_URL, {
     method: 'POST',
     headers: {
-      id_token: authResult.id_token || undefined,
+      Authorization: `Bearer ${authResult.id_token || ''}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(record),
   })
-    .then(res => res.json())
+    .then(res => (res.status === 401 ? res.text() : res.json()))
     .then(data => console.log('DATA SENT: ', data))
     .catch(err => console.log('ERROR: ', err));
 }
