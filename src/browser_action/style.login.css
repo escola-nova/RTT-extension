@@ -100,27 +100,8 @@ body {
 .buttons {
   display: flex;
   justify-content: flex-end;
-}
-
-.btn {
-  border-radius: 5px;
-  margin: 4px;
-  margin-bottom: -5px;
-  padding: 5px 20px;
-}
-
-.btn:hover {
-  background: #eee;
-}
-
-.btn.active {
-  color: white;
-  background: #e74444;
-  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.4);
-}
-
-.btn.active:hover {
-  color: white;
+  align-items: center;
+  font-weight: 700;
 }
 
 .login_logo,
@@ -131,6 +112,7 @@ body {
 .login_title {
   font-size: 1.3rem;
 }
+
 .login_caption {
   color: #999;
 }
@@ -154,4 +136,97 @@ body {
   color: #777;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.checkbox{
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+.checkbox:after, .checkbox:before {
+  font-family: FontAwesome;
+  font-feature-settings: normal;
+  font-kerning: auto;
+  font-language-override: normal;
+  font-stretch: normal;
+  font-style: normal;
+  font-synthesis: weight style;
+  font-variant: normal;
+  font-weight: normal;
+  text-rendering: auto;
+}
+
+label {
+  width: 80px;
+  height: 35px;
+  background: #ccc;
+  position: relative;
+  display: inline-block;
+  border-radius: 46px;
+  transition: all .4s;
+}
+label:after{
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  left: 0;
+  top: -5px;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,.2);
+  transition: all .4s;
+}
+
+input{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  opacity: 0;
+  cursor:pointer;
+} 
+
+input:hover +label:after{
+    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, .2), 0 3px 8px 0 rgba(0, 0, 0, .15)
+}
+
+.checkbox:after{
+  content: '\f00d';
+  color: #aaa;
+  position: relative;
+  right: 30px;
+  bottom: 13px;
+}
+
+.checkbox:before{
+  content: '\f00c';
+  position: relative;
+  left: 32px;
+  bottom: 13px;
+  color: #fff;
+  z-index: 1;
+}
+
+.checkbox label{
+  width: 70px;
+  background: #EAEAEA;  
+}
+
+.checkbox label:after {
+  top: 0;
+  width: 35px;
+  height: 35px;
+}
+
+input:checked + label{
+  background: #E74444;
+}
+
+input:checked + label:after{
+  left: 36px;
 }

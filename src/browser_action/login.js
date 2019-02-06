@@ -12,8 +12,7 @@ function logout() {
 }
 
 function enableTracker() {
-  $('#enable-button').classList.add('active');
-  $('#disable-button').classList.remove('active');
+  $('#check-button').checked = true;
   if (window.localStorage.enable) return;
   window.localStorage.enable = 'true';
   window.chrome.runtime.sendMessage({
@@ -22,12 +21,15 @@ function enableTracker() {
 }
 
 function disableTracker() {
-  $('#enable-button').classList.remove('active');
-  $('#disable-button').classList.add('active');
+  $('#check-button').checked = false;
   window.localStorage.enable = '';
   window.chrome.runtime.sendMessage({
     type: 'disableTracker',
   });
+}
+
+function toggleTracker(e) {
+  return e.target.checked ? enableTracker() : disableTracker();
 }
 
 function renderMainView(profile) {
@@ -38,8 +40,7 @@ function renderMainView(profile) {
   });
   $('.loading').classList.add('hidden');
   $('.profile').classList.remove('hidden');
-  $('#enable-button').addEventListener('click', enableTracker);
-  $('#disable-button').addEventListener('click', disableTracker);
+  $('#check-button').addEventListener('click', toggleTracker);
   if (window.localStorage.enable) enableTracker();
   else disableTracker();
 }
