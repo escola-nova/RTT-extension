@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
+const events = {};
+let currentTab = '';
+
 window.chrome.runtime.onMessage.addListener(event => {
   events[event.type]();
 });
-
-const events = {};
-let currentTab = '';
 
 events.authenticate = function authenticate() {
   const options = {
@@ -16,7 +16,7 @@ events.authenticate = function authenticate() {
     .authenticate(options)
     .then(authResult => {
       window.localStorage.authResult = JSON.stringify(authResult);
-      window.localStorage.enable = 'true';
+      window.localStorage.enable = 1;
       events.sendNotification('Login Successful', 'You can use the app now');
       events.enableTracker();
     })
@@ -148,3 +148,14 @@ function sendData(record) {
     .then(data => console.log('DATA SENT: ', data))
     .catch(err => console.log('ERROR: ', err));
 }
+
+(function init() {
+  const authResult = JSON.parse(localStorage.authResult || '{}');
+  const enable = JSON.parse(localStorage.enable || '{}');
+  const token = authResult.id_token && window.jwt_decode(authResult.id_token);
+  if (token && token.exp > Date.now() / 1000 && +enable) {
+    events.enableTracker();
+  } else {
+    events.disableTracker();
+  }
+})();

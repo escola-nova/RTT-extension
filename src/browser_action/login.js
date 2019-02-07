@@ -13,8 +13,8 @@ function logout() {
 
 function enableTracker() {
   $('#check-button').checked = true;
-  if (window.localStorage.enable) return;
-  window.localStorage.enable = 'true';
+  if (+window.localStorage.enable) return;
+  window.localStorage.enable = 1;
   window.chrome.runtime.sendMessage({
     type: 'enableTracker',
   });
@@ -22,7 +22,7 @@ function enableTracker() {
 
 function disableTracker() {
   $('#check-button').checked = false;
-  window.localStorage.enable = '';
+  window.localStorage.enable = 0;
   window.chrome.runtime.sendMessage({
     type: 'disableTracker',
   });
@@ -41,7 +41,7 @@ function renderMainView(profile) {
   $('.loading').classList.add('hidden');
   $('.profile').classList.remove('hidden');
   $('#check-button').addEventListener('click', toggleTracker);
-  if (window.localStorage.enable) enableTracker();
+  if (+window.localStorage.enable) enableTracker();
   else disableTracker();
 }
 

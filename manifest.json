@@ -15,6 +15,7 @@
     "scripts": [
       "./env.js",
       "./node_modules/auth0-chrome/dist/auth0chrome.min.js",
+      "./node_modules/jwt-decode/build/jwt-decode.js",
       "./src/main.js"
     ],
     "persistent": false
