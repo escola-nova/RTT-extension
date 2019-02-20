@@ -138,13 +138,14 @@ body {
   text-decoration: underline;
 }
 
-.checkbox{
+.checkbox {
   position: relative;
   display: inline-block;
   margin-bottom: 0px;
 }
 
-.checkbox:after, .checkbox:before {
+.checkbox:after,
+.checkbox:before {
   font-family: FontAwesome;
   font-feature-settings: normal;
   font-kerning: auto;
@@ -164,9 +165,9 @@ label {
   position: relative;
   display: inline-block;
   border-radius: 46px;
-  transition: all .4s;
+  transition: all 0.4s;
 }
-label:after{
+label:after {
   content: '';
   position: absolute;
   width: 50px;
@@ -176,11 +177,11 @@ label:after{
   top: -5px;
   z-index: 2;
   background: #fff;
-  box-shadow: 0 0 5px rgba(0,0,0,.2);
-  transition: all .4s;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s;
 }
 
-input{
+input {
   position: absolute;
   left: 0;
   top: 0;
@@ -188,14 +189,14 @@ input{
   height: 100%;
   z-index: 5;
   opacity: 0;
-  cursor:pointer;
-} 
-
-input:hover +label:after{
-    box-shadow: 0 2px 15px 0 rgba(0, 0, 0, .2), 0 3px 8px 0 rgba(0, 0, 0, .15)
+  cursor: pointer;
 }
 
-.checkbox:after{
+input:hover + label:after {
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.15);
+}
+
+.checkbox:after {
   content: '\f00d';
   color: #aaa;
   position: relative;
@@ -203,7 +204,7 @@ input:hover +label:after{
   bottom: 13px;
 }
 
-.checkbox:before{
+.checkbox:before {
   content: '\f00c';
   position: relative;
   left: 32px;
@@ -212,9 +213,9 @@ input:hover +label:after{
   z-index: 1;
 }
 
-.checkbox label{
+.checkbox label {
   width: 70px;
-  background: #EAEAEA;  
+  background: #eaeaea;
 }
 
 .checkbox label:after {
@@ -223,10 +224,10 @@ input:hover +label:after{
   height: 35px;
 }
 
-input:checked + label{
-  background: #E74444;
+input:checked + label {
+  background: #e74444;
 }
 
-input:checked + label:after{
+input:checked + label:after {
   left: 36px;
 }

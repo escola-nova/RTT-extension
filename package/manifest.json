@@ -1,8 +1,9 @@
 {
-  "name": "RTT - Real Time Tracker",
-  "version": "0.0.0",
+  "name": "RTT - Internet Usage Tracking",
+  "version": "0.0.2",
   "manifest_version": 2,
   "description": "",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgR47HDAJlJr2/lNGrrDyMib8E9enDncYWVGVrf7w2UFW5seEMceTjNWi7EKrrn9FUfs5HND4u/SbEeg0hfBpyUI5QVDuB9tiAFJ4w3dKgkpedXoNPTKJmXqPscRvLRg2NwEbWIITBTwugVA6S+Gu7Ro23Pu1/htexACVzB5eMIFvIeZmvmdZZ9hBJHo0/fkWPGYUOgdiPEGzOvdAXUk64Zdr2xznDKtojxVTaESjKyP0710pap74SD8VePQf33dqIKSxA8r3jTGtMljUN/T3nRxD9bqrhqU5qq+x+QkfsMx1W0I19wO/w6bkFL6vaXlRvC+9aJivH5WYCqu/qx/z8wIDAQAB",
   "browser_action": {
     "default_title": "Auth0",
     "default_popup": "src/browser_action/login.html",
@@ -26,6 +27,6 @@
     "storage",
     "tabs",
     "https://*.auth0.com/*",
-    "http://*.localhost:3000/*"
+    "https://escolanova-rtt.nandan.cloud/*"
   ]
 }
