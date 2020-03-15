@@ -7,13 +7,39 @@ window.chrome.runtime.onMessage.addListener(event => {
   events[event.type]();
 });
 
+
+class ChromeClient extends window.Auth0Chrome {
+  getAuthResult (url, interactive) {
+    console.log(url, interactive)
+    return new Promise((resolve, reject) => {
+      chrome.identity.launchWebAuthFlow({url, interactive}, (callbackURL) => {
+        console.log('callbackURL ', callbackURL)
+        if ( chrome.runtime.lastError ) {
+          return reject(new Error(chrome.runtime.lastError.message))
+        }
+        resolve(callbackURL);
+      });
+    });
+  }
+
+  _authenticate (...args) {
+    console.log(this.get)
+    return this.authenticate(...args)
+  }
+
+  getRedirectURL () {
+    return chrome.identity.getRedirectURL('auth0');
+  }
+}
+
 events.authenticate = function authenticate() {
   const options = {
     scope: 'openid profile email offline_access',
     device: 'chrome-extension',
   };
-  new window.Auth0Chrome(window.env.AUTH0_DOMAIN, window.env.AUTH0_CLIENT_ID)
-    .authenticate(options)
+
+  new ChromeClient(window.env.AUTH0_DOMAIN, window.env.AUTH0_CLIENT_ID)
+    ._authenticate(options)
     .then(authResult => {
       window.localStorage.authResult = JSON.stringify(authResult);
       window.localStorage.enable = 1;
@@ -21,6 +47,7 @@ events.authenticate = function authenticate() {
       events.enableTracker();
     })
     .catch(err => {
+      console.error(err);
       events.sendNotification('Login Failed', err.message);
     });
 };
