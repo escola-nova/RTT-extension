@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* global chrome */
 
 const events = {};
 let currentTab = '';
@@ -7,27 +8,26 @@ window.chrome.runtime.onMessage.addListener(event => {
   events[event.type]();
 });
 
-
 class ChromeClient extends window.Auth0Chrome {
-  getAuthResult (url, interactive) {
-    console.log(url, interactive)
+  getAuthResult(url, interactive) {
+    console.log(url, interactive);
     return new Promise((resolve, reject) => {
-      chrome.identity.launchWebAuthFlow({url, interactive}, (callbackURL) => {
-        console.log('callbackURL ', callbackURL)
-        if ( chrome.runtime.lastError ) {
-          return reject(new Error(chrome.runtime.lastError.message))
+      chrome.identity.launchWebAuthFlow({url, interactive}, callbackURL => {
+        console.log('callbackURL ', callbackURL);
+        if (chrome.runtime.lastError) {
+          return reject(new Error(chrome.runtime.lastError.message));
         }
-        resolve(callbackURL);
+        return resolve(callbackURL);
       });
     });
   }
 
-  _authenticate (...args) {
-    console.log(this.get)
-    return this.authenticate(...args)
+  _authenticate(...args) {
+    console.log(this.get);
+    return this.authenticate(...args);
   }
 
-  getRedirectURL () {
+  getRedirectURL() {
     return chrome.identity.getRedirectURL('auth0');
   }
 }
